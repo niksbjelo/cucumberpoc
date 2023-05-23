@@ -7,6 +7,8 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    BACKEND_BROWSERLESS_URL: z.string(),
+    BACKEND_BROWSERLESS_TOKEN: z.string(),
     BACKEND_BROWSERLESS: z.string(),
     NODE_ENV: z.enum(["development", "test", "production"]),
   },
@@ -25,6 +27,8 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    BACKEND_BROWSERLESS_URL: process.env.BACKEND_BROWSERLESS_URL,
+    BACKEND_BROWSERLESS_TOKEN: process.env.BACKEND_BROWSERLESS_TOKEN,
     BACKEND_BROWSERLESS: process.env.BACKEND_BROWSERLESS,
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
