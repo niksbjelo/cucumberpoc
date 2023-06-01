@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { env } from "~/env.mjs";
-import { runCrawl } from "~/server/features/conf/step-definitions/olocal_step";
+import { cucumber } from "~/server/features/runCucumber";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const exampleRouter = createTRPCRouter({
@@ -16,6 +16,6 @@ export const exampleRouter = createTRPCRouter({
     return "g,dspoig,dspg"
   }),
   runCrawl: publicProcedure.mutation(() => {
-    return runCrawl()
+    return cucumber.api.LiveMusicProduction()
   }),
 });
