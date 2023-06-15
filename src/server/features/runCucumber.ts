@@ -6,24 +6,56 @@ import {
   type IRunOptions,
 } from "@cucumber/cucumber/api";
 
-export const cucumber = {
+type CucumberApi = {
+  [key: string]: (section?: string) => Promise<string | boolean>;
+};
+
+export const cucumber: { api: CucumberApi } = {
   api: {
     LiveMusicProduction: async () => {
       return await runCrawl("@LiveMusicProduction", "./cucumber.js", false);
     },
-    LiveMusicProduction1: async () => {
-      return await runCrawl("@test", "./cucumber.js", false);
+    VilleDeLausanne: async () => {
+      return await runCrawl("@VilleDeLausanne", "./cucumber.js", false);
+    },
+    OpusOne: async () => {
+      return await runCrawl("@OpusOne", "./cucumber.js", false);
+    },
+    Payot: async (section) => {
+      return await runCrawl(`${section ?? ""}`, "./cucumber.js", false);
+    },
+    SmsGagnant: async () => {
+      return await runCrawl(`@SmsGagnant`, "./cucumber.js", false);
     },
   },
 };
-let supportBuilt: ISupportCodeLibrary;
-let confCucumber: IRunOptions;
 
+let supportGenerated: ISupportCodeLibrary | null;
+let confCucumber: IRunOptions;
+type ScriptByWebsite = {
+  [key: string]: {
+    scriptNbUrlEvents?: (selectors: string) => string;
+    scriptListUrlEvents?: (selectors: string) => string;
+    scriptGetTitle?: string;
+    scriptGetSubTitle?: string;
+    scriptGetDate?: string;
+    scriptGetPlace?: string;
+    scriptGetImage?: string;
+    scriptGetDescription?: string;
+    scriptGetInfo?: string;
+  };
+};
+type World = {
+  world: {
+    resultJson: string;
+    scriptByWebsite: () => ScriptByWebsite;
+  };
+};
 export async function runCrawl(
   tag: string,
   configFile: string,
   failFast: boolean,
-) {
+): Promise<string | boolean> {
   const environment = { cwd: process.cwd() };
   const { runConfiguration } = await loadConfiguration(
     { file: configFile, provided: { failFast } },
@@ -33,20 +65,17 @@ export async function runCrawl(
 
   sources.tagExpression = tag;
 
-  if (!supportBuilt) {
+  if (!supportGenerated) {
     const support = await loadSupport(runConfiguration, environment);
     confCucumber = { ...runConfiguration, support, sources };
   } else {
-    confCucumber = { ...runConfiguration, support: supportBuilt, sources };
+    confCucumber = { ...runConfiguration, support: supportGenerated, sources };
   }
 
   const { success, support } = await runCucumber(confCucumber, environment);
+  supportGenerated = support;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const W = new support.World() as World;
 
-  supportBuilt = support;
-
-  const { World } = support;
-
-// Accéder à l'objet 'world' depuis le support code
- console.log(new World())
-  return success;
+  return success ? W.world.resultJson : success;
 }

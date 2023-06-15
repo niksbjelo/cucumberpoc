@@ -1,9 +1,10 @@
-const { After, Before} = require("@cucumber/cucumber");
+const { After, Before } = require("@cucumber/cucumber");
 
-Before(function () {
-
+Before(function (scenario) {
+  const tags = scenario.pickle.tags.map((tag) => tag.name);
+  this.tag = tags[0].replace("@", "");
 });
 
-After(async function (scenario) {
-    await this.browser.close();
+After({ timeout: 777000 * 1000 }, async function (scenario) {
+  (await this.browser?.close()) ?? (await this.driver?.quit());
 });

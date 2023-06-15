@@ -12,10 +12,17 @@ export const exampleRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-  getTitleFromMusicProduction: publicProcedure.mutation(() => {
-    return "g,dspoig,dspg"
-  }),
-  runCrawl: publicProcedure.mutation(() => {
-    return cucumber.api.LiveMusicProduction()
-  }),
+  runCrawl: publicProcedure
+    .input(
+      z.object({
+        site: z.string(),
+        tag: z.union([z.string(), z.undefined()]),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { site, tag } = input;
+      console.log(site, tag);
+
+      return cucumber.api[site]?.(tag);
+    }),
 });

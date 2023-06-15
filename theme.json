@@ -1,1 +1,7 @@
-{"theme":{"step keyword": ["orange"], "feature keyword": ["magenta", "bold"], "scenario keyword": ["red"]}}
+{
+  "theme": {
+    "step keyword": ["orange"],
+    "feature keyword": ["magenta", "bold"],
+    "scenario keyword": ["red"]
+  }
+}
