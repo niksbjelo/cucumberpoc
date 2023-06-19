@@ -119,7 +119,7 @@ When(
         (await this.page?.goto(this.domain + url)) ??
           (await this.driver?.get(this.domain + url));
         if (tag === "VilleDeLausanne") {
-          await this.waitForSeconds(2);
+          await this.waitForSeconds(7);
         }
         const event = {
           id: this.domain + url,
@@ -127,7 +127,7 @@ When(
             (await this.page?.evaluate(
               (scriptGetTitle) => eval(scriptGetTitle),
               scriptGetTitle,
-            )) ?? (await this.driver.executeScript(scriptGetTitle)),
+            )) ?? (await this.driver.executeScript(scriptGetTitle ?? "")),
           subtitle:
             (await this.page?.evaluate(
               (scriptGetSubTitle) => eval(scriptGetSubTitle),
@@ -165,7 +165,6 @@ When(
             )) ?? (await this.driver.executeScript(scriptGetDescription)),
           info: "",
         };
-        //console.log(event);
         Events.push(event);
       } catch (e) {
         console.log(e);

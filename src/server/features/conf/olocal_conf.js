@@ -126,3 +126,6 @@ class CustomWorld {
 setWorldConstructor(CustomWorld);
 setDefaultTimeout(777000 * 1000);
 module.exports = this.world;
+setWorldConstructor(CustomWorld);
+setDefaultTimeout(777000 * 1000);
+module.exports = this.world;
